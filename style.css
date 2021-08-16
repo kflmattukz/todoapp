@@ -3,133 +3,62 @@ body {
   padding: 0;
   top: 0;
   bottom: 0;
-  background-color: #ecf0f1;
-  color: #2c3e50;
+  left: 0;
+  right: 0;
+  background-color: #eee;
+  color: #333;
   font-family: 'Roboto';
-  /* font-size: 10px; */
 }
 
-header > h2 {
-  margin: 15px 0;
+header {
   text-align: center;
+  margin-bottom: 30px;
+}
+
+header >  h2 {
   font-size: 3rem;
-  font-weight: 200;
+  font-weight: 300;
+  margin: 0;
+}
+header > h3 {
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
 }
 
 .container {
-  max-width: 500px;
+  max-width: 450px;
   margin: 30px auto;
-
 }
 
 form {
-  display: flex;
-
+  width: 100%;
+  display:flex;
 }
 
 form > .todo-input {
-  flex: auto;
-  font-size: 20px;
-  margin-right: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
   padding: 5px 10px;
+  flex: auto;
+  border: 1px solid rgba(0, 0, 0, .25);
+  font-size: 20px;
 }
 
-form > .todo-input:focus , .add:focus{
+form > .todo-input:focus , .btn:focus {
   outline: none;
-  box-shadow: 0 0 0 3px #3498dbd8;
+  box-shadow: 0 0 0 3px blueviolet;
 }
 
 .btn {
-  align-items: center;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.add {
-  font-size: 15px;
-  font-weight: 600;
-  padding: 5px 15px;
-  background-color: #2980b9;
-  color: #ecf0f1;
-  transition: ease .3s;
-}
-
-svg {
-  pointer-events: none;
-}
-
-.svg-add {
-  margin: 0;
-  padding: 0;
-  width: 26px;
-}
-
-.svg-done {
-  width: 25px;
-}
-
-.svg-del {
-  width: 20px;
-}
-
-.done , .del {
-  background-color:transparent;
-  border:none;
-  border-radius: 0;
-  margin: 0;
-  padding: 0;
- }
-.done {
-  color: #2ecc71;
-}
-
-.del {
-  color: #e74c3c;
-}
-
-.add:hover {
-  background-color: #3498db;
-  color: #fff;
+  border: 1px solid rgba(0, 0, 0, .25);
 }
 
 .todo {
   display: flex;
-  align-items: center;
-  padding: 5px 10px;
   margin: 10px 0;
   background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, .25);
-  border-radius: 3px;
 }
 
-.todo-name {
+.todo > .todo-name {
   flex: auto;
-  padding: 0 15px;
-}
-
-.todo-status {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 10px;
-  margin: 10px 0;
-  background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, .25);
-  border-radius: 3px;
-}
-
-.complete {
-  text-decoration: line-through;
-}
-
-.edit {
-  width: 100%;
-  font-size: 18px;
-}
-
-.edit:focus {
-  outline: none;
-  border: 1px solid rgba(0, 0, 0, .15);
+  margin-left: 30px;
 }
