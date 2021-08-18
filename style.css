@@ -62,3 +62,8 @@ form > .todo-input:focus , .btn:focus {
   flex: auto;
   margin-left: 30px;
 }
+
+.completed {
+  text-decoration: line-through;
+  color: #555;
+}
