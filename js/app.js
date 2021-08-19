@@ -9,7 +9,7 @@ btnAdd.addEventListener('click' , function (e) {
     console.log('TODO EMPTY');
     return false;
   }
-  
+
   todo.add(30,todoInput.value , false);
 });
 
@@ -36,7 +36,7 @@ const todo = {
     el.parentElement.remove();
   },
   done : function (el) {
-    el.nextElementSibling.classList.toggle('completed');
+    el.nextElementSibling.classList.toggle('line-through');
   },
   load : function (todos) {
     todos.map(item => {
@@ -48,9 +48,9 @@ const todo = {
 
 function templateTodo(id, text, completed) {
 
-  return `<div class="todo" id="${ id }">        
-            <button class="btn btn--done">Done</button>
-            <div class="todo-name ${ completed ? 'completed' : '' }">${ text }</div>
-            <button class="btn btn--del">Delete</button>
+  return `<div class="todo flex items-center py-1" id="${ id }">        
+            <button class="btn rounded p-2 btn--done bg-green-500 hover:bg-green-600 text-white">Done</button>
+            <div class="todo-name flex-auto pl-5 text-gray-600 font-semibold text-xl ${ completed ? 'line-through' : '' }">${ text }</div>
+            <button class="btn rounded p-2 btn--del bg-red-500 hover:bg-red-600 text-white">Delete</button>
           </div>`;
 }

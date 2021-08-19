@@ -1,0 +1,23 @@
+{
+  "name": "todoapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kflmattukz/todoapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kflmattukz/todoapp/issues"
+  },
+  "homepage": "https://github.com/kflmattukz/todoapp#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
