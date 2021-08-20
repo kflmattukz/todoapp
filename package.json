@@ -17,7 +17,5 @@
     "url": "https://github.com/kflmattukz/todoapp/issues"
   },
   "homepage": "https://github.com/kflmattukz/todoapp#readme",
-  "devDependencies": {
-    "nodemon": "^2.0.12"
-  }
+  "devDependencies": {}
 }

@@ -1,56 +1,94 @@
 const todoInput = document.querySelector('.todo-input');
-const btnAdd = document.querySelector('.btn--add');
-const todoList = document.querySelector('.todolist');
+const todoList = document.querySelector('.todo-list');
+const btnAdd = document.querySelector('.btn-add');
 
-btnAdd.addEventListener('click' , function (e) {
-  e.preventDefault()
-  
+btnAdd.addEventListener('click' , function(e){
+  e.preventDefault();
+
   if (todoInput.value === '') {
-    console.log('TODO EMPTY');
-    return false;
+    // give error that todo text can't be empty
+  } else {
+    todo.add(todoInput.value);
   }
-
-  todo.add(30,todoInput.value , false);
 });
 
 todoList.addEventListener('click' , function (e) {
-  const element  = e.target;
-  const el = e.target.classList;
-  if (el.contains('btn--done')) {
-    // console.log(e.target);
-    todo.done(element);
+  const el = e.target;
+  if (el.classList.contains('delete')) {
+    // console.log('delete');
+    // e.target.parentElement.remove();
+    todo.del(el);
   }
 
-  if (el.contains('btn--del')) {
-    todo.del(element);
+  if (el.classList.contains('complete')) {
+    // console.log('completed');
+    todo.completed(el);
+  }
+});
+
+todoList.addEventListener('dblclick' , function (e) {
+  if ( e.target.classList.contains('edit')) {
+    console.log('edit');
+    todo.edit(e.target);
+    //change the border color
+  }
+});
+
+todoList.addEventListener('keypress' , function (e){
+  if (e.keyCode === 13) {
+    if (e.target.classList.contains('update')) {
+      //update todo text
+      todo.update(e.target);
+    }
   }
 });
 
 const todo = {
-  add : function (id,text,completed) {
-    todoList.insertAdjacentHTML('afterbegin' , templateTodo(id , text , completed));
+  add : function (todo) {
+    todoList.insertAdjacentHTML('beforeend' , templateTodo(todo));
     todoInput.value = '';
     todoInput.focus();
   },
-  del : function (el) {
-    el.parentElement.remove();
+  del : function (element) {
+    element.parentElement.remove();
   },
-  done : function (el) {
-    el.nextElementSibling.classList.toggle('line-through');
+  completed : function (element) {
+    element.parentElement.classList.toggle('border-blue-400');
+    element.parentElement.classList.toggle('border-green-400');
+    element.nextElementSibling.classList.toggle('line-through');
   },
-  load : function (todos) {
-    todos.map(item => {
-      this.add(item);
-    });
-    console.log('hello');
+  edit : function (element) {
+    element.classList.add('hidden');
+    element.nextElementSibling.classList.remove('hidden');
+    element.nextElementSibling.focus();
+    element.nextElementSibling.select();
+    element.parentElement.classList.remove('border-blue-400');
+    element.parentElement.classList.add('border-yellow-400');
+    // change the border color
+  },
+  update : function (element) {
+    const newValue = element.value;
+    element.classList.add('hidden');
+    element.previousElementSibling.classList.remove('hidden');
+    element.previousElementSibling.innerText = newValue;
+    element.parentElement.classList.remove('border-yellow-400');
+    element.parentElement.classList.add('border-blue-400');
   }
 }
 
-function templateTodo(id, text, completed) {
-
-  return `<div class="todo flex items-center py-1" id="${ id }">        
-            <button class="btn rounded p-2 btn--done bg-green-500 hover:bg-green-600 text-white">Done</button>
-            <div class="todo-name flex-auto pl-5 text-gray-600 font-semibold text-xl ${ completed ? 'line-through' : '' }">${ text }</div>
-            <button class="btn rounded p-2 btn--del bg-red-500 hover:bg-red-600 text-white">Delete</button>
+function templateTodo(todo) {
+  return `<div class="todo bg-white border border-blue-400 flex items-center py-2 px-1 rounded-md">
+            <button class="complete text-green-600 hover:text-green-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+            <div class="edit todo-text flex-auto pl-3 text-gray-600">${ todo }</div>
+            <input type="text" class="hidden update flex-auto outline-none pl-3 text-gray-500" value="${ todo }">
+            <button class="delete text-red-600 hover:text-red-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
           </div>`;
 }
