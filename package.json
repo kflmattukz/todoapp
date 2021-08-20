@@ -4,7 +4,7 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon ./index"
   },
   "repository": {
     "type": "git",
@@ -17,5 +17,6 @@
     "url": "https://github.com/kflmattukz/todoapp/issues"
   },
   "homepage": "https://github.com/kflmattukz/todoapp#readme",
-  "devDependencies": {}
+  "devDependencies": {},
+  "dependencies": {}
 }
