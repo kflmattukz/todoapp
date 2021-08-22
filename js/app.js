@@ -1,115 +1,132 @@
 const todoInput = document.querySelector('.todo-input');
+const todoAdd =  document.querySelector('.todo-add');
 const todoList = document.querySelector('.todo-list');
-const btnAdd = document.querySelector('.btn-add');
 
-let todos = [];
+const todos = [];
 
-//load data from localStorage
-
-if (localStorage.getItem('todos') === null) {
-  localStorage.setItem('todos' , JSON.stringify(todos));
-} else {
-  todos = JSON.parse(localStorage.getItem('todos'));
-  todos.map(todo => {
-    todoList.insertAdjacentHTML('beforeend' , templateTodo(todo));
-  });
-}
-
-btnAdd.addEventListener('click' , function(e){
-  e.preventDefault();
-
-  if (todoInput.value === '') {
-    // give error that todo text can't be empty
-  } else {
+todoAdd.addEventListener('click' , function (e){
+    e.preventDefault();
     todo.add(todoInput.value);
-  }
 });
 
-todoList.addEventListener('click' , function (e) {
-  const el = e.target;
-  if (el.classList.contains('delete')) {
-    // console.log('delete');
-    // e.target.parentElement.remove();
-    todo.del(el);
-  }
-
-  if (el.classList.contains('complete')) {
-    // console.log('completed');
-    todo.completed(el);
-  }
-});
-
-todoList.addEventListener('dblclick' , function (e) {
-  if ( e.target.classList.contains('edit')) {
-    console.log('edit');
-    todo.edit(e.target);
-    //change the border color
-  }
-});
-
-todoList.addEventListener('keypress' , function (e){
-  if (e.keyCode === 13) {
-    if (e.target.classList.contains('update')) {
-      //update todo text
-      todo.update(e.target);
+todoList.addEventListener('click' , function(e){
+    const el = e.target;
+    if (el.classList.contains('completed')) {
+        todo.toggleCompleted(el);
     }
-  }
+    if (el.classList.contains('remove')) {
+        todo.remove(todo.getTodoId(el));
+        console.log(todo.getTodoId(el));
+    }
+});
+
+/// Trigger EDIT
+todoList.addEventListener('dblclick', function(e){
+    const el = e.target;
+    const id  = todo.getTodoId(el);
+    if (el.classList.contains('edit')) {
+        console.log('edit');
+        el.classList.toggle('hidden');
+        el.nextElementSibling.classList.toggle('hidden');
+        el.nextElementSibling.focus();
+        el.nextElementSibling.select();
+        el.nextElementSibling.addEventListener('keyup' , function(e){
+            if (e.keyCode === 13) {
+                todo.update(id , e.target.value);
+                e.target.classList.toggle('hidden');
+                e.target.previousElementSibling.innerText = e.target.value;
+                e.target.previousElementSibling.classList.toggle('hidden');
+            }
+            
+        });
+    }
 });
 
 const todo = {
-  add : function (todo) {
-    const newTodo = {
-      id : todos.length+1,
-      text : todoInput.value,
-      completed : false
-    };
-    todos.push(newTodo);
-    localStorage.setItem('todos' , JSON.stringify(todos));
-    todoList.insertAdjacentHTML('beforeend' , templateTodo(newTodo));
-    todoInput.value = '';
-    todoInput.focus();
-  },
-  del : function (element) {
-    element.parentElement.remove();
-  },
-  completed : function (element) {
-    element.parentElement.classList.toggle('border-blue-400');
-    element.parentElement.classList.toggle('border-green-400');
-    element.nextElementSibling.classList.toggle('line-through');
-  },
-  edit : function (element) {
-    element.classList.add('hidden');
-    element.nextElementSibling.classList.remove('hidden');
-    element.nextElementSibling.focus();
-    element.nextElementSibling.select();
-    element.parentElement.classList.remove('border-blue-400');
-    element.parentElement.classList.add('border-yellow-400');
-    // change the border color
-  },
-  update : function (element) {
-    const newValue = element.value;
-    element.classList.add('hidden');
-    element.previousElementSibling.classList.remove('hidden');
-    element.previousElementSibling.innerText = newValue;
-    element.parentElement.classList.remove('border-yellow-400');
-    element.parentElement.classList.add('border-blue-400');
-  }
+    getRandomId: function () {
+        return Math.random().toString(36).substr(2, 9);
+    },
+    getTodoId: function (element) {
+        return element.parentElement.getAttribute('id');
+    },
+    getIndexTodo: function (el) {
+        
+        // return indexTodo;
+    },
+    add: function (text) {
+        const _id = this.getRandomId();
+        todos.push(objTodo(_id , text));
+        localStorage.setItem(_id , JSON.stringify(todos[todos.length-1] , null ,4));
+        todoList.insertAdjacentHTML("afterbegin", templateTodo(todos[todos.length-1]), todos.length -1 );
+    },
+    update: function (id , text) {
+        // let indexTodo = 0;
+        todos.map(todo => {
+            if (todo.id === id){
+                todo.text = text;
+                localStorage.setItem(todo.id , JSON.stringify(todo));
+            }
+        });
+    },
+    remove: function (id) {
+        localStorage.removeItem(id);
+        todoList.innerHTML = '';
+        this.loadLocalStorage();
+    },
+    toggleCompleted: function(el) {
+        let indexTodo = 0;
+        todos.map(todo => {
+            if (todo.id === this.getTodoId(el)){
+                // console.log(todos[indexTodo].id);
+                if (todos[indexTodo].completed === false) {
+                    todos[indexTodo].completed = true;
+                    localStorage.setItem(todos[indexTodo].id , JSON.stringify(todos[indexTodo]));
+                } else {
+                    todos[indexTodo].completed = false;
+                    localStorage.setItem(todos[indexTodo].id , JSON.stringify(todos[indexTodo]));
+                }
+            } else {
+                indexTodo +=1;
+            }
+        });
+        el.nextElementSibling.classList.toggle('line-through');
+    },
+    loadLocalStorage: function () {
+        if (localStorage.key(0) === null) {
+            console.log('local storage is empty');
+        } else {
+            for (let i = 0 ; i < localStorage.length ; i++) {
+                todos.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+                todoList.insertAdjacentHTML("afterbegin", templateTodo(todos[todos.length-1]));
+            }
+        }
+    }
 }
 
-
-function templateTodo({id, text, completed} = todo) {
-  return `<div class="todo bg-white border border-blue-400 flex items-center py-2 px-1 rounded-md" id="${ id }">
-            <button class="complete text-green-600 hover:text-green-500">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
-            <div class="edit todo-text flex-auto pl-3 text-gray-600 ${ completed ? 'line-through' : '' }">${ text }</div>
-            <input type="text" class="hidden update flex-auto outline-none pl-3 text-gray-500" value="${ text }">
-            <button class="delete text-red-600 hover:text-red-500">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
-          </div>`;
+const templateTodo = ( {id , text , completed} = todo )  => {
+    // console.log(todo.completed);
+    return `<div class="todo flex items-center bg-white shadow-md rounded-md overflow-hidden" id="${ id }">
+                <button class="completed text-gray-50 py-2 px-3 bg-green-500 hover:text-green-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+                <div class="todo-name edit flex-auto mx-2 truncate text-gray-700 font-medium ${ completed ? 'line-through' : '' }">${ text }</div>
+                <input type="text" class="update hidden flex-auto mx-2 outline-none focus:ring ring-blue-500 text-gray-600 font-medium p-1 rounded shadow-lg border border-gray-400" value="${ text }">
+                <button class="remove text-gray-50 py-2 px-3 bg-red-500 hover:text-red-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+            </div>`;
 }
+
+const objTodo = (id,text) => {
+    return {
+        id: id,
+        text : text,
+        completed: false
+    }
+}
+
+todo.loadLocalStorage();
