@@ -12,6 +12,7 @@ todoAdd.addEventListener('click' , function (e){
 todoList.addEventListener('click' , function(e){
     const el = e.target;
     if (el.classList.contains('completed')) {
+        // el.classList.add('trasition duration-500', 'ease-out' ,'rotate-180');
         todo.toggleCompleted(el);
     }
     if (el.classList.contains('remove')) {
@@ -52,34 +53,54 @@ todoList.addEventListener('dblclick', function(e){
     }
 });
 
+
+const data = {
+    getId: function (id) {
+        return localStorage.key(id);
+    },
+    store: function (id , content) {
+        localStorage.setItem(id , JSON.stringify(content),null ,4);
+    },
+    getByIndex: function(index) {
+        return JSON.parse(localStorage.getItem(this.getId(index)));
+    },
+    getById: function(id) {
+        return JSON.parse(localStorage.getItem(id));
+    },
+    data: function remove(id) {
+        localStorage.removeItem(id);
+    }
+}
+
 const todo = {
     getRandomId: function () {
+        //generate random ID
         return Math.random().toString(36).substr(2, 9);
     },
     getTodoId: function (element) {
         return element.parentElement.getAttribute('id');
     },
-    getIndexTodo: function (el) {
-        
-        // return indexTodo;
-    },
     add: function (text) {
         const _id = this.getRandomId();
         todos.push(objTodo(_id , text));
-        localStorage.setItem(_id , JSON.stringify(todos[todos.length-1] , null ,4));
-        todoList.insertAdjacentHTML("afterbegin", templateTodo(todos[todos.length-1]), todos.length -1 );
+        data.store(_id , todos[todos.length-1])
+        // localStorage.setItem(_id , JSON.stringify( , null ,4));
+        todoList.insertAdjacentHTML("afterbegin", templateTodo(todos[todos.length-1]));
+        todoInput.value = '';
     },
     update: function (id , text) {
         // let indexTodo = 0;
         todos.map(todo => {
             if (todo.id === id){
                 todo.text = text;
-                localStorage.setItem(todo.id , JSON.stringify(todo));
+                // localStorage.setItem(todo.id , JSON.stringify(todo));
+                data.store(todo.id , todo);
             }
         });
     },
     remove: function (id) {
-        localStorage.removeItem(id);
+        // localStorage.removeItem(id);
+        data.remove(id);
         todoList.innerHTML = '';
         this.loadLocalStorage();
     },
@@ -90,23 +111,29 @@ const todo = {
                 // console.log(todos[indexTodo].id);
                 if (todos[indexTodo].completed === false) {
                     todos[indexTodo].completed = true;
-                    localStorage.setItem(todos[indexTodo].id , JSON.stringify(todos[indexTodo]));
+                    // localStorage.setItem(todos[indexTodo].id , JSON.stringify(todos[indexTodo]));
+                    data.store(todos[indexTodo].id , todos[indexTodo]);
                 } else {
                     todos[indexTodo].completed = false;
-                    localStorage.setItem(todos[indexTodo].id , JSON.stringify(todos[indexTodo]));
+                    // localStorage.setItem(todos[indexTodo].id , JSON.stringify(todos[indexTodo]));
+                    data.store(todos[indexTodo].id , todos[indexTodo]);
+
                 }
             } else {
                 indexTodo +=1;
             }
         });
         el.nextElementSibling.classList.toggle('line-through');
+        // todoList.innerHTML = '';
+        // this.loadLocalStorage();
     },
     loadLocalStorage: function () {
-        if (localStorage.key(0) === null) {
+        if (data.getId(0) === null) {
             console.log('local storage is empty');
+            todoList.innerHTML = '<h3 class="text-center font-semibold text-2xl text-gray-600">Todo\'s empty , add todo on input</h3>'
         } else {
             for (let i = 0 ; i < localStorage.length ; i++) {
-                todos.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+                todos.push(data.getByIndex(i));
                 todoList.insertAdjacentHTML("afterbegin", templateTodo(todos[todos.length-1]));
             }
         }
@@ -116,14 +143,14 @@ const todo = {
 const templateTodo = ( {id , text , completed} = todo )  => {
     // console.log(todo.completed);
     return `<div class="todo flex items-center bg-white shadow-md rounded-md overflow-hidden" id="${ id }">
-                <button class="completed text-gray-50 py-2 px-3 bg-green-500 hover:text-green-900">
+                <button class="completed text-gray-50 py-2 px-3 bg-green-500 transition duration-500 ease-in-out hover:text-green-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </button>
-                <div class="todo-name edit flex-auto mx-2 truncate text-gray-700 font-medium ${ completed ? 'line-through' : '' }">${ text }</div>
+                <div class="todo-name edit flex-auto mx-2 truncate text-gray-700 font-medium ${ completed ? 'line-through' : '' }">${ text } ${ completed ? '✔' : '' }</div>
                 <input type="text" class="update hidden flex-auto mx-2 outline-none focus:ring ring-blue-500 text-gray-600 font-medium p-1 rounded shadow-lg border border-gray-400" value="${ text }">
-                <button class="remove text-gray-50 py-2 px-3 bg-red-500 hover:text-red-900">
+                <button class="remove text-gray-50 py-2 px-3 bg-red-500 transition duration-500 ease-in-out hover:text-red-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -131,12 +158,17 @@ const templateTodo = ( {id , text , completed} = todo )  => {
             </div>`;
 }
 
+//structure todo item on database
 const objTodo = (id,text) => {
     return {
         id: id,
         text : text,
         completed: false
     }
+}
+
+const completedEffect = () => {
+    console.log(this)
 }
 
 todo.loadLocalStorage();
