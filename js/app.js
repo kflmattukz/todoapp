@@ -6,7 +6,15 @@ const todos = [];
 
 todoAdd.addEventListener('click' , function (e){
     e.preventDefault();
-    todo.add(todoInput.value);
+    if (todoInput.value === '') {
+        todoInput.classList.add('bg-red-100' ,'border', 'border-red-700');
+        todoInput.setAttribute('placeholder' , 'todo item can\'t be empty');
+    } else {
+        todoInput.classList.remove('bg-red-100' ,'border', 'border-red-700');
+        todo.add(todoInput.value);
+        todoInput.setAttribute('placeholder' , 'type here');
+    }
+    
 });
 
 todoList.addEventListener('click' , function(e){
@@ -67,7 +75,7 @@ const data = {
     getById: function(id) {
         return JSON.parse(localStorage.getItem(id));
     },
-    data: function remove(id) {
+    remove: function (id) {
         localStorage.removeItem(id);
     }
 }
@@ -123,6 +131,7 @@ const todo = {
                 indexTodo +=1;
             }
         });
+
         el.nextElementSibling.classList.toggle('line-through');
         // todoList.innerHTML = '';
         // this.loadLocalStorage();
