@@ -24,7 +24,17 @@ todoList.addEventListener('click' , function(e){
 todoList.addEventListener('dblclick', function(e){
     const el = e.target;
     const id  = todo.getTodoId(el);
+    
     if (el.classList.contains('edit')) {
+        console.log();
+        todoList.querySelectorAll('.update').forEach(function (update){
+            if(update.classList.contains('update') && update.classList.contains('hidden')) {
+                // update.classList.add('hidden');
+            } else {
+                update.classList.toggle('hidden');
+                update.previousElementSibling.classList.toggle('hidden');
+            }
+        })
         console.log('edit');
         el.classList.toggle('hidden');
         el.nextElementSibling.classList.toggle('hidden');
