@@ -95,6 +95,8 @@ const todo = {
         // localStorage.setItem(_id , JSON.stringify( , null ,4));
         todoList.insertAdjacentHTML("afterbegin", templateTodo(todos[todos.length-1]));
         todoInput.value = '';
+        todoList.innerHTML = '';
+        this.loadLocalStorage();
     },
     update: function (id , text) {
         // let indexTodo = 0;
@@ -131,10 +133,7 @@ const todo = {
                 indexTodo +=1;
             }
         });
-
         el.nextElementSibling.classList.toggle('line-through');
-        // todoList.innerHTML = '';
-        // this.loadLocalStorage();
     },
     loadLocalStorage: function () {
         if (data.getId(0) === null) {
