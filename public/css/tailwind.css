@@ -791,6 +791,10 @@ video {
   color: rgba(55, 65, 81, var(--tw-text-opacity));
 }
 
+.line-through {
+  text-decoration: line-through;
+}
+
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

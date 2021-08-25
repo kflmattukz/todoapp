@@ -20,6 +20,7 @@ todoAdd.addEventListener('click' , function (e){
 todoList.addEventListener('click' , function(e){
     const el = e.target;
     if (el.classList.contains('completed')) {
+        console.log('hello');
         // el.classList.add('trasition duration-500', 'ease-out' ,'rotate-180');
         todo.toggleCompleted(el);
     }
