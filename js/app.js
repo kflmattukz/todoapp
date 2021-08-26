@@ -176,8 +176,4 @@ const objTodo = (id,text) => {
     }
 }
 
-const completedEffect = () => {
-    console.log(this)
-}
-
 todo.loadLocalStorage();
