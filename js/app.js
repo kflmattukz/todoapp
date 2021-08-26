@@ -20,13 +20,10 @@ todoAdd.addEventListener('click' , function (e){
 todoList.addEventListener('click' , function(e){
     const el = e.target;
     if (el.classList.contains('completed')) {
-        console.log('hello');
-        // el.classList.add('trasition duration-500', 'ease-out' ,'rotate-180');
         todo.toggleCompleted(el);
     }
     if (el.classList.contains('remove')) {
         todo.remove(todo.getTodoId(el));
-        console.log(todo.getTodoId(el));
     }
 });
 
@@ -51,18 +48,19 @@ todoList.addEventListener('dblclick', function(e){
         el.nextElementSibling.focus();
         el.nextElementSibling.select();
         el.nextElementSibling.addEventListener('keyup' , function(e){
+            const elm  = e.target;
             if (e.keyCode === 13) {
-                todo.update(id , e.target.value);
-                e.target.classList.toggle('hidden');
-                e.target.previousElementSibling.innerText = e.target.value;
-                e.target.previousElementSibling.classList.toggle('hidden');
+                todo.update(id , elm.value);
+                elm.classList.toggle('hidden');
+                elm.previousElementSibling.innerText = elm.value;
+                elm.previousElementSibling.classList.toggle('hidden');
             }
             
         });
     }
 });
 
-
+//localStorage function 
 const data = {
     getId: function (id) {
         return localStorage.key(id);
@@ -93,7 +91,6 @@ const todo = {
         const _id = this.getRandomId();
         todos.push(objTodo(_id , text));
         data.store(_id , todos[todos.length-1])
-        // localStorage.setItem(_id , JSON.stringify( , null ,4));
         todoList.insertAdjacentHTML("afterbegin", templateTodo(todos[todos.length-1]));
         todoInput.value = '';
         todoList.innerHTML = '';
@@ -104,13 +101,11 @@ const todo = {
         todos.map(todo => {
             if (todo.id === id){
                 todo.text = text;
-                // localStorage.setItem(todo.id , JSON.stringify(todo));
                 data.store(todo.id , todo);
             }
         });
     },
     remove: function (id) {
-        // localStorage.removeItem(id);
         data.remove(id);
         todoList.innerHTML = '';
         this.loadLocalStorage();
@@ -138,7 +133,6 @@ const todo = {
     },
     loadLocalStorage: function () {
         if (data.getId(0) === null) {
-            console.log('local storage is empty');
             todoList.innerHTML = '<h3 class="text-center font-semibold text-2xl text-gray-600">Todo\'s empty , add todo on input</h3>'
         } else {
             for (let i = 0 ; i < localStorage.length ; i++) {
@@ -149,15 +143,14 @@ const todo = {
     }
 }
 
-const templateTodo = ( {id , text , completed} = todo )  => {
-    // console.log(todo.completed);
+const templateTodo = ({id , text , completed})  => {
     return `<div class="todo flex items-center bg-white shadow-md rounded-md overflow-hidden" id="${ id }">
                 <button class="completed text-gray-50 py-2 px-3 bg-green-500 transition duration-500 ease-in-out hover:text-green-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </button>
-                <div class="todo-name edit flex-auto mx-2 truncate text-gray-700 font-medium ${ completed ? 'line-through' : '' }">${ text } ${ completed ? '✔' : '' }</div>
+                <div class="todo-name edit flex-auto mx-2 truncate text-gray-700 font-medium ${ completed ? 'line-through' : '' }">${ text }</div>
                 <input type="text" class="update hidden flex-auto mx-2 outline-none focus:ring ring-blue-500 text-gray-600 font-medium p-1 rounded shadow-lg border border-gray-400" value="${ text }">
                 <button class="remove text-gray-50 py-2 px-3 bg-red-500 transition duration-500 ease-in-out hover:text-red-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
