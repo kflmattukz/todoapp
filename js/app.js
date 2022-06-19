@@ -19,12 +19,14 @@ todoAdd.addEventListener('click' , function (e){
 
 todoList.addEventListener('click' , function(e){
     const el = e.target;
-    if (el.classList.contains('completed')) {
-        todo.toggleCompleted(el);
-    }
-    if (el.classList.contains('remove')) {
-        todo.remove(todo.getTodoId(el));
-    }
+    el.classList.contains('completed') ? todo.toggleCompleted(el) : ''
+    el.classList.contains('remove') ? todo.remove(todo.getTodoId(el)) : ''
+    // if (el.classList.contains('completed')) {
+    //     todo.toggleCompleted(el);
+    // }
+    // if (el.classList.contains('remove')) {
+    //     todo.remove(todo.getTodoId(el));
+    // }
 });
 
 /// Trigger EDIT
@@ -113,17 +115,7 @@ const todo = {
     toggleCompleted: function(el) {
         todos.map((todo,i) => {
             if (todo.id === this.getTodoId(el)){
-
-                // todos[i].completed === false ? (todos[i].completed = true, data.store(todos[i].id , todos[i])) : (todos[i].completed = false, data.store(todos[i].id , todos[i]))
                 todos[i].completed ? (todos[i].completed = false, data.store(todos[i].id , todos[i])) : (todos[i].completed = true, data.store(todos[i].id , todos[i]))
-
-                // if (todos[i].completed === false) {
-                //     todos[i].completed = true;
-                //     data.store(todos[i].id , todos[i]);
-                // } else {
-                //     todos[i].completed = false;
-                //     data.store(todos[i].id , todos[i]);
-                // }
             }
         });
         el.nextElementSibling.classList.toggle('line-through');
