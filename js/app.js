@@ -33,7 +33,7 @@ todoList.addEventListener('dblclick', function(e){
     const id  = todo.getTodoId(el);
     
     if (el.classList.contains('edit')) {
-        console.log();
+        
         todoList.querySelectorAll('.update').forEach(function (update){
             if(update.classList.contains('update') && update.classList.contains('hidden')) {
                 // update.classList.add('hidden');
@@ -42,7 +42,7 @@ todoList.addEventListener('dblclick', function(e){
                 update.previousElementSibling.classList.toggle('hidden');
             }
         })
-        console.log('edit');
+        
         el.classList.toggle('hidden');
         el.nextElementSibling.classList.toggle('hidden');
         el.nextElementSibling.focus();
@@ -111,22 +111,19 @@ const todo = {
         this.loadLocalStorage();
     },
     toggleCompleted: function(el) {
-        let indexTodo = 0;
-        todos.map(todo => {
+        todos.map((todo,i) => {
             if (todo.id === this.getTodoId(el)){
-                // console.log(todos[indexTodo].id);
-                if (todos[indexTodo].completed === false) {
-                    todos[indexTodo].completed = true;
-                    // localStorage.setItem(todos[indexTodo].id , JSON.stringify(todos[indexTodo]));
-                    data.store(todos[indexTodo].id , todos[indexTodo]);
-                } else {
-                    todos[indexTodo].completed = false;
-                    // localStorage.setItem(todos[indexTodo].id , JSON.stringify(todos[indexTodo]));
-                    data.store(todos[indexTodo].id , todos[indexTodo]);
 
-                }
-            } else {
-                indexTodo +=1;
+                // todos[i].completed === false ? (todos[i].completed = true, data.store(todos[i].id , todos[i])) : (todos[i].completed = false, data.store(todos[i].id , todos[i]))
+                todos[i].completed ? (todos[i].completed = false, data.store(todos[i].id , todos[i])) : (todos[i].completed = true, data.store(todos[i].id , todos[i]))
+
+                // if (todos[i].completed === false) {
+                //     todos[i].completed = true;
+                //     data.store(todos[i].id , todos[i]);
+                // } else {
+                //     todos[i].completed = false;
+                //     data.store(todos[i].id , todos[i]);
+                // }
             }
         });
         el.nextElementSibling.classList.toggle('line-through');
