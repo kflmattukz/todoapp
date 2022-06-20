@@ -20,7 +20,9 @@ todoAdd.addEventListener("click", function (e) {
 todoList.addEventListener("click", function (e) {
   const el = e.target;
   el.classList.contains("completed") ? todo.toggleCompleted(el) : "";
-  el.classList.contains("remove") ? todo.remove(todo.getTodoId(el)) : "";
+  el.classList.contains("remove")
+    ? todo.remove(todo.getTodoId(el), el.parentElement)
+    : "";
 });
 
 /// Trigger EDIT
@@ -80,19 +82,18 @@ const todo = {
     return element.parentElement.getAttribute("id");
   },
   add: function (text) {
-    const _id = this.getRandomId();
+    const _id = Date.now();
     todos.push(objTodo(_id, text));
+    // todos.push(objTodo(text));
     data.store(_id, todos[todos.length - 1]);
+
     todoList.insertAdjacentHTML(
-      "afterbegin",
+      "beforeend",
       templateTodo(todos[todos.length - 1])
     );
     todoInput.value = "";
-    todoList.innerHTML = "";
-    this.loadLocalStorage();
   },
   update: function (id, text) {
-    // let indexTodo = 0;
     todos.map((todo) => {
       if (todo.id === id) {
         todo.text = text;
@@ -100,34 +101,37 @@ const todo = {
       }
     });
   },
-  remove: function (id) {
+  remove: function (id, element) {
     data.remove(id);
-    todoList.innerHTML = "";
-    this.loadLocalStorage();
+    element.remove();
   },
   toggleCompleted: function (el) {
     todos.map((todo, i) => {
-      if (todo.id === this.getTodoId(el)) {
+      // '' + todo.id ---> convert number to string
+      if ('' + todo.id === this.getTodoId(el)) {
         todos[i].completed
-          ? ((todos[i].completed = false), data.store(todos[i].id, todos[i]))
-          : ((todos[i].completed = true), data.store(todos[i].id, todos[i]));
+          ? (todos[i].completed = false, data.store(todos[i].id, todos[i]))
+          : (todos[i].completed = true, data.store(todos[i].id, todos[i]));
       }
     });
     el.nextElementSibling.classList.toggle("line-through");
   },
   loadLocalStorage: function () {
     if (localStorage.length > 0) {
-        for (let i = 0; i < localStorage.length; i++) {
-          todos.push(data.getByIndex(i));
-          todoList.insertAdjacentHTML(
-            "afterbegin",
-            templateTodo(todos[todos.length - 1])
-          );
-        }
+      for (let i = 0; i < localStorage.length; i++) {
+        todos.push(data.getByIndex(i));
+      }
+
+      todos
+        .sort((a, b) => a.id - b.id)
+        .forEach((todo) => {
+          console.log(todo);
+          todoList.insertAdjacentHTML("beforeend", templateTodo(todo));
+        });
     } else {
-        todoList.innerHTML = '<h3 class="text-center font-semibold text-2xl text-gray-600">Todo\'s empty , add todo on input</h3>';
+      todoList.innerHTML =
+        '<h3 class="text-center font-semibold text-2xl text-gray-600">Todo\'s empty , add todo on input</h3>';
     }
-    
   },
 };
 
