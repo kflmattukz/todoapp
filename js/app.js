@@ -3,7 +3,6 @@ const todoAdd = document.querySelector(".todo-add");
 const todoList = document.querySelector(".todo-list");
 
 const todos = [];
-
 //localStorage function
 const data = {
   getId: function (id) {
