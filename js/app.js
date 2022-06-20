@@ -93,9 +93,11 @@ const todo = {
     );
     todoInput.value = "";
   },
+  // TODO : fix update 
   update: function (id, text) {
     todos.map((todo) => {
-      if (todo.id === id) {
+      // '' + todo.id ---> convert number to string
+      if ('' + todo.id === id) {
         todo.text = text;
         data.store(todo.id, todo);
       }
