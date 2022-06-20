@@ -4,56 +4,6 @@ const todoList = document.querySelector(".todo-list");
 
 const todos = [];
 
-document.addEventListener("submit", function (e) {
-  e.preventDefault();
-  if (todoInput.value === "") {
-    todoInput.classList.add("bg-red-100", "border", "border-red-700");
-    todoInput.setAttribute("placeholder", "todo item can't be empty");
-  } else {
-    todoInput.classList.remove("bg-red-100", "border", "border-red-700");
-    todo.add(todoInput.value);
-    todoInput.setAttribute("placeholder", "type here");
-  }
-});
-
-
-todoList.addEventListener("click", function (e) {
-  const el = e.target;
-  el.classList.contains("completed") ? todo.toggleCompleted(el) : "";
-  el.classList.contains("remove")
-    ? todo.remove(todo.getTodoId(el), el.parentElement)
-    : "";
-});
-
-/// Trigger EDIT
-todoList.addEventListener("dblclick", function (e) {
-  const el = e.target;
-  const id = todo.getTodoId(el);
-
-  if (el.classList.contains("edit")) {
-    todoList.querySelectorAll(".update").forEach(function (update) {
-      update.classList.contains("update") && update.classList.contains("hidden")
-        ? ""
-        : (update.classList.toggle("hidden"),
-          update.previousElementSibling.classList.toggle("hidden"));
-    });
-
-    el.classList.toggle("hidden");
-    el.nextElementSibling.classList.toggle("hidden");
-    el.nextElementSibling.focus();
-    el.nextElementSibling.select();
-    el.nextElementSibling.addEventListener("keyup", function (e) {
-      const elm = e.target;
-      if (e.keyCode === 13) {
-        todo.update(id, elm.value);
-        elm.classList.toggle("hidden");
-        elm.previousElementSibling.innerText = elm.value;
-        elm.previousElementSibling.classList.toggle("hidden");
-      }
-    });
-  }
-});
-
 //localStorage function
 const data = {
   getId: function (id) {
@@ -126,6 +76,56 @@ const todo = {
     }
   },
 };
+
+document.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (todoInput.value === "") {
+    todoInput.classList.add("bg-red-100", "border", "border-red-700");
+    todoInput.setAttribute("placeholder", "todo item can't be empty");
+  } else {
+    todoInput.classList.remove("bg-red-100", "border", "border-red-700");
+    todo.add(todoInput.value);
+    todoInput.setAttribute("placeholder", "type here");
+  }
+});
+
+
+todoList.addEventListener("click", function (e) {
+  const el = e.target;
+  el.classList.contains("completed") ? todo.toggleCompleted(el) : "";
+  el.classList.contains("remove")
+    ? todo.remove(todo.getTodoId(el), el.parentElement)
+    : "";
+});
+
+/// Trigger EDIT
+todoList.addEventListener("dblclick", function (e) {
+  const el = e.target;
+  const id = todo.getTodoId(el);
+
+  if (el.classList.contains("edit")) {
+    todoList.querySelectorAll(".update").forEach(function (update) {
+      update.classList.contains("update") && update.classList.contains("hidden")
+        ? ""
+        : (update.classList.toggle("hidden"),
+          update.previousElementSibling.classList.toggle("hidden"));
+    });
+
+    el.classList.toggle("hidden");
+    el.nextElementSibling.classList.toggle("hidden");
+    el.nextElementSibling.focus();
+    el.nextElementSibling.select();
+    el.nextElementSibling.addEventListener("keyup", function (e) {
+      const elm = e.target;
+      if (e.keyCode === 13) {
+        todo.update(id, elm.value);
+        elm.classList.toggle("hidden");
+        elm.previousElementSibling.innerText = elm.value;
+        elm.previousElementSibling.classList.toggle("hidden");
+      }
+    });
+  }
+});
 
 const templateTodo = ({ id, text, completed }) => {
   return `<div class="todo flex items-center bg-white shadow-md rounded-md overflow-hidden" id="${id}">
