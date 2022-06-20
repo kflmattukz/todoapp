@@ -4,8 +4,7 @@ const todoList = document.querySelector(".todo-list");
 
 const todos = [];
 
-//EVENTS Section
-todoAdd.addEventListener("click", function (e) {
+document.addEventListener("submit", function (e) {
   e.preventDefault();
   if (todoInput.value === "") {
     todoInput.classList.add("bg-red-100", "border", "border-red-700");
@@ -16,6 +15,7 @@ todoAdd.addEventListener("click", function (e) {
     todoInput.setAttribute("placeholder", "type here");
   }
 });
+
 
 todoList.addEventListener("click", function (e) {
   const el = e.target;
@@ -74,17 +74,12 @@ const data = {
 };
 
 const todo = {
-  getRandomId: function () {
-    //generate random ID
-    return Math.random().toString(36).substr(2, 9);
-  },
   getTodoId: function (element) {
     return element.parentElement.getAttribute("id");
   },
   add: function (text) {
     const _id = Date.now();
     todos.push(objTodo(_id, text));
-    // todos.push(objTodo(text));
     data.store(_id, todos[todos.length - 1]);
 
     todoList.insertAdjacentHTML(
@@ -93,14 +88,9 @@ const todo = {
     );
     todoInput.value = "";
   },
-  // TODO : fix update 
   update: function (id, text) {
     todos.map((todo) => {
-      // '' + todo.id ---> convert number to string
-      if ('' + todo.id === id) {
-        todo.text = text;
-        data.store(todo.id, todo);
-      }
+      '' + todo.id === id ? ( todo.text = text , data.store(todo.id, todo) ) : '';
     });
   },
   remove: function (id, element) {
