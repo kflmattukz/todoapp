@@ -1,6 +1,34 @@
-const todoInput = document.querySelector(".todo-input");
-const todoAdd = document.querySelector(".todo-add");
-const todoList = document.querySelector(".todo-list");
+const rootTemplate = () => {
+  return `
+  <p class="hidden line-through"></p>
+  <header class="text-center text-gray-600">
+      <h1 class="text-4xl font-light mb-3">Todoapp</h1>
+      <h2 class="text-2xl font-regular mb-3">Manage Your Todo</h2>
+  </header>
+
+  <form action="#" method="POST" class="flex sm:w-1/3 md:1/2 rounded shadow mx-auto rounded-lg overflow-hidden">
+      <input type="text" class="flex-auto px-3 py-2 text-xl outline-none" placeholder="type here" autocomplete="off" id="todo-input">
+      <button type="submit" class="px-3 bg-blue-500 text-white font-bold uppercase tracking-wide transition duration-500 ease-in-out hover:text-blue-900" id="todo-add">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+      </button>
+  </form>
+
+  <div class="flex flex-col gap-2 sm:w-1/3 md:1/2 mx-auto mt-5" id="todo-list"></div>
+  `
+}
+
+function init () {
+  document.getElementById('root').insertAdjacentHTML('afterbegin', rootTemplate());
+}
+
+init();
+
+
+const todoInput = document.getElementById("todo-input");
+const todoAdd = document.getElementById("todo-add");
+const todoList = document.getElementById("todo-list");
 
 const todos = [];
 //localStorage function
@@ -51,8 +79,8 @@ const todo = {
       // '' + todo.id ---> convert number to string
       if ('' + todo.id === this.getTodoId(el)) {
         todos[i].completed
-          ? (todos[i].completed = false, data.store(todos[i].id, todos[i]))
-          : (todos[i].completed = true, data.store(todos[i].id, todos[i]));
+          ? (!todos[i].completed, data.store(todos[i].id, todos[i]))
+          : (!todos[i].completed, data.store(todos[i].id, todos[i]));
       }
     });
     el.nextElementSibling.classList.toggle("line-through");
@@ -153,5 +181,6 @@ const objTodo = (id, text) => {
     completed: false,
   };
 };
+
 
 todo.loadLocalStorage();
