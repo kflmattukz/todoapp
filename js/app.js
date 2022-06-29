@@ -1,31 +1,3 @@
-const rootTemplate = () => {
-  return `
-  <p class="hidden line-through"></p>
-  <header class="text-center text-gray-600">
-      <h1 class="text-4xl font-light mb-3">Todoapp</h1>
-      <h2 class="text-2xl font-regular mb-3">Manage Your Todo</h2>
-  </header>
-
-  <form action="#" method="POST" class="flex sm:w-1/3 md:1/2 rounded shadow mx-auto rounded-lg overflow-hidden">
-      <input type="text" class="flex-auto px-3 py-2 text-xl outline-none" placeholder="type here" autocomplete="off" id="todo-input">
-      <button type="submit" class="px-3 bg-blue-500 text-white font-bold uppercase tracking-wide transition duration-500 ease-in-out hover:text-blue-900" id="todo-add">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-      </button>
-  </form>
-
-  <div class="flex flex-col gap-2 sm:w-1/3 md:1/2 mx-auto mt-5" id="todo-list"></div>
-  `
-}
-
-function init () {
-  document.getElementById('root').insertAdjacentHTML('afterbegin', rootTemplate());
-}
-
-init();
-
-
 const todoInput = document.getElementById("todo-input");
 const todoAdd = document.getElementById("todo-add");
 const todoList = document.getElementById("todo-list");
@@ -50,6 +22,7 @@ const data = {
   },
 };
 
+// TODO:  when todos empty and add item the empty message not dissapear 
 const todo = {
   getTodoId: function (element) {
     return element.parentElement.getAttribute("id");
@@ -84,6 +57,7 @@ const todo = {
       }
     });
     el.nextElementSibling.classList.toggle("line-through");
+    el.parentElement.classList.toggle("opacity-80");
   },
   loadLocalStorage: function () {
     if (localStorage.length > 0) {
@@ -94,7 +68,6 @@ const todo = {
       todos
         .sort((a, b) => a.id - b.id)
         .forEach((todo) => {
-          console.log(todo);
           todoList.insertAdjacentHTML("beforeend", templateTodo(todo));
         });
     } else {
@@ -107,10 +80,13 @@ const todo = {
 document.addEventListener("submit", function (e) {
   e.preventDefault();
   if (todoInput.value === "") {
-    todoInput.classList.add("bg-red-100", "border", "border-red-700");
+    console.log(todoInput)
+    todoInput.parentElement.classList.add("border", "border-red-700");
+    todoInput.classList.add("bg-red-100")
     todoInput.setAttribute("placeholder", "todo item can't be empty");
   } else {
-    todoInput.classList.remove("bg-red-100", "border", "border-red-700");
+    todoInput.parentElement.classList.remove("bg-red-100", "border", "border-red-700");
+    todoInput.classList.remove("bg-red-100")
     todo.add(todoInput.value);
     todoInput.setAttribute("placeholder", "type here");
   }
@@ -119,10 +95,8 @@ document.addEventListener("submit", function (e) {
 
 todoList.addEventListener("click", function (e) {
   const el = e.target;
-  el.classList.contains("completed") ? todo.toggleCompleted(el) : "";
-  el.classList.contains("remove")
-    ? todo.remove(todo.getTodoId(el), el.parentElement)
-    : "";
+  el.classList.contains("completed") && todo.toggleCompleted(el);
+  el.classList.contains("remove") && todo.remove(todo.getTodoId(el), el.parentElement);
 });
 
 /// Trigger EDIT
