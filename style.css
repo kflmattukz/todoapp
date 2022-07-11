@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter' , 'Roboto' , 'SF Text';
+}
+
+body {
+  background-color: #eee;
+  font-family: 'Inter' , 'Roboto' , 'SF Text';
+  width: 50vw;
+  margin: 0 auto;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+.opacity {
+  opacity: .5;
+}
+
+header {
+  margin: 0 auto;
+  text-align: center;
+  color: #444;
+}
+
+.header__title{
+  font-size: 2em;
+  font-weight: 200;
+}
+
+.header__content {
+  font-size: medium;
+  font-weight: 400;
+
+}
+
+.form-input {
+  margin-top: 25px;
+}
+
+#todo-form {
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid rgba(100, 100, 100, .2);
+  overflow: hidden;
+  filter: drop-shadow(0 5px 1px rgba(0, 0, 0, .2));
+}
+
+#todo-input {
+  flex-grow:1;
+  padding: 5px 10px;
+  font-size: 1em;
+  border: 0px;
+}
+
+#todo-input:focus {
+  outline: none;
+}
+
+
+.form-input__button {
+  /* flex-grow: 5; */
+  padding: 5px 10px;
+  color: #fff;
+  letter-spacing: .5px;
+  text-transform: capitalize;
+  font-weight: 700;
+  background-color: #3498db;
+  border: 0px;
+  cursor: pointer;
+}
+
+#item-list {
+  padding-top: 25px;
+  display: flex;
+  flex-flow: column;
+  gap: 10px;
+}
+
+.item {
+  background-color: #fff;
+  filter: drop-shadow(0 5px 1px rgba(0, 0, 0, .2));
+  border-radius: 5px;
+  display: flex;
+  /* padding: 5px 0; */
+  overflow: hidden;
+  padding-left: 10px;
+  align-items: center;
+}
+
+.item__task {
+  flex-grow: 1;
+}
+
+.item__action {
+  display: flex;
+  flex-direction: row;
+  /* gap: 2px; */
+}
+
+.item__action__remove , .item__action__edit {
+  padding: 10px 10px;
+  border: 0;
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: 1px;
+  background-color: red;
+  cursor: pointer;
+}
+
+.item__action__remove {
+  background-color: #e74c3c;
+}
+
+.item__action__edit {
+  background-color: #2ecc71;
+}
+
+/* .update {
+  
+  display: flex;
+  flex-flow:column;
+} */
+
+#update-form {
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid rgba(100, 100, 100, .2);
+  overflow: hidden;
+  filter: drop-shadow(0 5px 1px rgba(0, 0, 0, .2));
+}
+
+#update-task {
+  flex-grow:1;
+  padding: 5px 10px;
+  font-size: 1em;
+  border: 0px;
+}
+
+#update-task:focus {
+  outline: none;
+}
+
+.update__form__button {
+  padding: 5px 10px;
+  color: #fff;
+  letter-spacing: .5px;
+  text-transform: capitalize;
+  font-weight: 700;
+  background-color: #f1c40f;
+  border: 0px;
+}
