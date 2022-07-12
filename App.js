@@ -5,8 +5,8 @@ const root = document.getElementById('root')
 function formInput () {
   return `<div class='form-input w-4/5 sm:w-3/5 md:w-2/5 lg:w-2/6 mx-auto'>
             <form id='todo-form' class="flex group-focus:outline outline-sky-700/25 items-center border border-sky-600/50 rounded-lg shadow-lg overflow-hidden">
-                <input  class="group px-3 flex-grow text-lg text-gray-500 outline-none" id='todo-input' type='text' name='item' placeholder='Enter new Item here...' />
-                <button class="px-5 py-2 bg-sky-500 font-semibold text-gray-50 tracking-wide lowercase">&#10009;</button>
+                <input  class="group py-1 px-3 flex-grow text-lg text-gray-500 outline-none" id='todo-input' type='text' name='item' placeholder='Enter new Item here...' />
+                <button class="px-6 py-2 bg-sky-500 font-semibold text-gray-50 tracking-wide lowercase">&#10009;</button>
             </form>
             </div>
 
@@ -16,7 +16,7 @@ function formInput () {
 root.insertAdjacentHTML('afterbegin' , formInput())
 
 function todoList ({id ,task ,completed}) {
-  return `<div class='item flex items-center bg-white rounded-md shadow-md border ${completed ? 'border-green-700/75' : 'border-sky-700/75'} overflow-hidden' item-id=${id} >
+  return `<div class='item flex items-center bg-white rounded-md shadow-md border ${completed ? 'border-green-700/75 opacity-50' : 'border-sky-700/75'} overflow-hidden' item-id=${id} >
             <div class='flex-grow toggle-complete ml-3 font-medium text-gray-500 truncate ${completed ? 'line-through' : ''} '>${task}</div>
             <div class='action flex'>
               <button class='px-4 py-1 remove bg-red-500 font-semibold text-gray-50 tracking-wide'>&#10006</button>
