@@ -16,11 +16,11 @@ function formInput () {
 root.insertAdjacentHTML('afterbegin' , formInput())
 
 function todoList ({id ,task ,completed}) {
-  return `<div class='item flex items-center bg-white rounded-md shadow-md border ${completed ? 'border-green-700/75 opacity-50' : 'border-sky-700/75'} overflow-hidden' item-id=${id} >
+  return `<div class='item flex items-center border border-gray-200 bg-white rounded-md shadow-md overflow-hidden' item-id=${id} >
             <div class='flex-grow toggle-complete ml-3 font-medium text-gray-500 truncate ${completed ? 'line-through' : ''} '>${task}</div>
             <div class='action flex'>
-              <button class='px-4 py-1 remove bg-red-500 font-semibold text-gray-50 tracking-wide'>&#10006</button>
-              <button class='px-3 py-1 edit bg-green-500 font-semibold text-gray-50 tracking-wide'>&#9998;</button>
+              <button class='px-4 py-2 remove bg-red-600 hover:bg-red-700 duration-300 font-semibold text-gray-200 hover:text-gray-50 tracking-wide'>&#10006</button>
+              <button class='px-3 py-2 edit bg-green-600 hover:bg-green-700 duration-300 font-semibold text-gray-200 hover:text-gray-50 tracking-wide'>&#9998;</button>
             </div>
           </div>`
 }
@@ -33,6 +33,14 @@ function updateInput ({id , task , completed}) {
               <input class="group px-3 flex-grow text-lg text-gray-500 outline-none" id='update-task' type='text' name='update-todo' value='${task}' />
               <button class='update px-5 py-2 bg-green-500 font-semibold text-gray-50 tracking-wide lowercase'>&#10004;</button>  
             </form>
+          </div>`
+}
+
+function todoInfo({all,ongoing,completed}) {
+  return `<div class='flex w-4/5 sm:w-3/5 md:w-2/5 lg:w-2/6 mx-auto mt-5 bg-white border border-gray-300 rounded-md shadow-md p-2 items-center justify-between font-semibold text-gray-500 text-sm'>
+            <div>All : ${all}</div>
+            <div>Ongoing : ${ongoing}</div>
+            <div>Complete : ${completed}</div>
           </div>`
 }
 
@@ -132,6 +140,15 @@ const Todo = {
       Data.store(todo.id , todo)
     })
     loadTodo()
+  },
+  getTodoInfo() {
+    const result = Data.getAll()
+    let info = {
+      all : result.length,
+      ongoing : result.filter(todo => todo.completed !== true).length,
+      completed : result.filter(todo => todo.completed === true).length
+    }
+    return info
   }
 }
 
@@ -144,10 +161,19 @@ function loadTodo () {
     result.map(todo => {
       itemList.insertAdjacentHTML('afterbegin' , todoList(todo))
     })
+    if (itemList.nextElementSibling) {
+      itemList.nextElementSibling.remove()
+    }
+    itemList.insertAdjacentHTML('afterend' , todoInfo(Todo.getTodoInfo()))
     return
   }
   itemList.innerHTML = ''
+  if (itemList.nextElementSibling) {
+    itemList.nextElementSibling.remove()
+  }
+  itemList.insertAdjacentHTML('afterend' , todoInfo(Todo.getTodoInfo()))
   itemList.insertAdjacentHTML('afterend' , "<p class='empty text-center text-2xl font-light text-gray-600 capitalize'>task empty... <br/> input more task</p>")
+  // itemList.insertAdjacentHTML('afterend' , todoInfo({all: 10 , ongoing: 3, completed: 2}))
 }
 
 
