@@ -18,7 +18,11 @@ todoForm.addEventListener('submit' , function(event) {
     //TODO: change the value of placeholder if input empty and give errro message
     return
   }
-  Todo.addTodo(todoObject(todoInput.value))
+  Todo.addTodo({
+    id: Date.now(),
+    task: todoInput.value,
+    completed: false
+  })
   todoInput.value = ''
 })
 
@@ -149,22 +153,11 @@ function updateListener(event) {
   const updateTask = document.getElementById('update-task').value
   const updateComplete = document.getElementById('update-complete').value === 'true'
   
-  const todo = {
+  Data.store(updateId , {
     id :updateId,
     task: updateTask,
     completed: updateComplete
-  }
-
-  Data.store(updateId , todo)
-
+  })
   loadTodo()
   todoInput.focus()
-}
-
-function todoObject (task) {
-  return {
-    id: Date.now(),
-    task: task,
-    completed: false
-  }
 }
