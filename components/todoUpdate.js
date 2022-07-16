@@ -4,7 +4,7 @@ export default function todoUpdate ({id , task , completed}) {
               <input id='update-id' value=${id} hidden />
               <input id='update-complete' value=${completed} hidden />
               <input class="w-full group px-3 text-lg text-gray-500 outline-none" id='update-task' type='text' name='update-todo' value='${task}' />
-              <button class='update px-5 py-2 bg-green-500 font-semibold text-gray-50 tracking-wide lowercase'>&#10004;</button>  
+              <button class='update px-6 py-2 bg-green-500 font-semibold text-gray-50 tracking-wide lowercase'>&#10004;</button>  
             </form>
           </div>`
 }

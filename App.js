@@ -33,7 +33,6 @@ document.addEventListener('click' , function(event) {
   }
 
   if (event.target.classList.contains('edit')) {
-    console.log(event.target.parentElement.parentElement)
     itemList.innerHTML = ''
     itemList.insertAdjacentHTML('afterbegin' , todoUpdate(Data.getById(event.target.parentElement.parentElement.getAttribute('item-id'))))
     if (document.getElementById('update-task')) {
@@ -41,19 +40,40 @@ document.addEventListener('click' , function(event) {
       return
     }
   }
-})
 
+  if (event.target.classList.contains('toggle-complete')) {
+    itemList.innerHTML = ''
+    const result = Data.getComplete()
+    result.map(todo => {
+      itemList.insertAdjacentHTML('afterbegin' , todoList(todo))
+    })
+  }
+
+  if (event.target.classList.contains('toggle-ongoing')) {
+    itemList.innerHTML = ''
+    const result = Data.getOngoing()
+    result.map(todo => {
+      itemList.insertAdjacentHTML('afterbegin' , todoList(todo))
+    })
+  }
+
+  if (event.target.classList.contains('toggle-all')) {
+    itemList.innerHTML = ''
+    const result = Data.getAll()
+    result.map(todo => {
+      itemList.insertAdjacentHTML('afterbegin' , todoList(todo))
+    })
+  }
+
+})
 
 document.addEventListener('dblclick' , function(event) {
   if (event.target.classList.contains('toggle-complete')) {
-    console.log('toggle complete')
     Todo.toggleCompletedTodo(event.target.parentElement.getAttribute('item-id'))
   }
 })
 
 document.addEventListener('submit', updateListener)
-
-// let todos = []
 
 const Data = {
   getId(index) {
@@ -69,17 +89,22 @@ const Data = {
     let result = []
     if (localStorage.length > 0) {
       for (let i = 0; i < localStorage.length; i++) {
-        const todo = Data.getByIndex(i)
+        const todo = this.getByIndex(i)
         result.push(todo)
       }
     }
     return result.sort((a,b) => a.id - b.id)
   },
+  getComplete() {
+    return this.getAll().filter(todo => todo.completed === true)
+  },
+  getOngoing() {
+    return this.getAll().filter(todo => todo.completed === false)
+  },
   store(id, todo) {
-    localStorage.setItem(id , JSON.stringify(todo , 4,null))
+    localStorage.setItem(id , JSON.stringify(todo ,4,null)) // 4 , Null << Formating 
   },
   remove(id) {
-    const todo = this.getById(id)
     localStorage.removeItem(id)
   }
 }
@@ -119,7 +144,6 @@ const Todo = {
 
 
 function loadTodo () {
-
   if (localStorage.length > 0) {
     itemList.innerHTML = ''
     const result = Data.getAll()
@@ -142,7 +166,6 @@ function loadTodo () {
 
 // Load data from localStorage and render it to html
 loadTodo()
-
 
 function updateListener(event) {
   if (event.target.getAttribute('id') === 'todo-form') {
