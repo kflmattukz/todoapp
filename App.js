@@ -1,48 +1,9 @@
-//TODO : add counter component that will count all task , completed task , ongoing task
+import formInput from "./components/formInput.js"
+import todoList from "./components/todoList.js"
+import todoUpdate from "./components/todoUpdate.js"
+import todoInfo from "./components/todoInfo.js"
 
-const root = document.getElementById('root')
-
-function formInput () {
-  return `<div class='form-input w-4/5 sm:w-3/5 md:w-2/5 lg:w-2/6 mx-auto'>
-            <form id='todo-form' class="flex group-focus:outline outline-sky-700/25 items-center border border-sky-600/50 rounded-lg shadow-lg overflow-hidden">
-                <input  class="group py-1 px-3 flex-grow text-lg text-gray-500 outline-none" id='todo-input' type='text' name='item' placeholder='Enter new Item here...' />
-                <button class="px-6 py-2 bg-sky-500 font-semibold text-gray-50 tracking-wide lowercase">&#10009;</button>
-            </form>
-            </div>
-
-          <div id='item-list' class="flex flex-col gap-1 mt-5 w-4/5 sm:w-3/5 md:w-2/5 lg:w-2/6 mx-auto"></div>`
-}
-
-root.insertAdjacentHTML('afterbegin' , formInput())
-
-function todoList ({id ,task ,completed}) {
-  return `<div class='item flex items-center border border-gray-200 bg-white rounded-md shadow-md overflow-hidden' item-id=${id} >
-            <div class='flex-grow toggle-complete ml-3 font-medium text-gray-500 truncate ${completed ? 'line-through' : ''} '>${task}</div>
-            <div class='action flex'>
-              <button class='px-4 py-2 remove bg-red-600 hover:bg-red-700 duration-300 font-semibold text-gray-200 hover:text-gray-50 tracking-wide'>&#10006</button>
-              <button class='px-3 py-2 edit bg-green-600 hover:bg-green-700 duration-300 font-semibold text-gray-200 hover:text-gray-50 tracking-wide'>&#9998;</button>
-            </div>
-          </div>`
-}
-
-function updateInput ({id , task , completed}) {
-  return `<div class='update'>
-            <form id='update-form' class="flex group-focus:outline outline-green-700/25 items-center border border-green-600/50 rounded-lg shadow-lg overflow-hidden">
-              <input id='update-id' value=${id} hidden />
-              <input id='update-complete' value=${completed} hidden />
-              <input class="group px-3 flex-grow text-lg text-gray-500 outline-none" id='update-task' type='text' name='update-todo' value='${task}' />
-              <button class='update px-5 py-2 bg-green-500 font-semibold text-gray-50 tracking-wide lowercase'>&#10004;</button>  
-            </form>
-          </div>`
-}
-
-function todoInfo({all,ongoing,completed}) {
-  return `<div class='flex w-4/5 sm:w-3/5 md:w-2/5 lg:w-2/6 mx-auto mt-5 bg-white border border-gray-300 rounded-md shadow-md p-2 items-center justify-between font-semibold text-gray-500 text-sm'>
-            <div>All : ${all}</div>
-            <div>Ongoing : ${ongoing}</div>
-            <div>Complete : ${completed}</div>
-          </div>`
-}
+document.getElementById('root').insertAdjacentHTML('afterbegin' , formInput())
 
 const todoForm = document.getElementById('todo-form')
 const todoInput = document.getElementById('todo-input')
@@ -70,7 +31,7 @@ document.addEventListener('click' , function(event) {
   if (event.target.classList.contains('edit')) {
     console.log(event.target.parentElement.parentElement)
     itemList.innerHTML = ''
-    itemList.insertAdjacentHTML('afterbegin' , updateInput(Data.getById(event.target.parentElement.parentElement.getAttribute('item-id'))))
+    itemList.insertAdjacentHTML('afterbegin' , todoUpdate(Data.getById(event.target.parentElement.parentElement.getAttribute('item-id'))))
     if (document.getElementById('update-task')) {
       document.getElementById('update-task').select()
       return
@@ -173,9 +134,7 @@ function loadTodo () {
   }
   itemList.insertAdjacentHTML('afterend' , todoInfo(Todo.getTodoInfo()))
   itemList.insertAdjacentHTML('afterend' , "<p class='empty text-center text-2xl font-light text-gray-600 capitalize'>task empty... <br/> input more task</p>")
-  // itemList.insertAdjacentHTML('afterend' , todoInfo({all: 10 , ongoing: 3, completed: 2}))
 }
-
 
 // Load data from localStorage and render it to html
 loadTodo()
