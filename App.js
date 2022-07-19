@@ -11,24 +11,60 @@ const itemList = document.getElementById('item-list')
 
 todoInput.focus()
 
-todoForm.addEventListener('submit' , function(event) {
+document.addEventListener('submit' , function (event) {
   event.preventDefault()
-  if (todoInput.value === '') {
-    console.log('task can\'t be empty')
-    //TODO: change the value of placeholder if input empty and give errro message
+  if (event.target.getAttribute('id') === 'todo-form') {
+    if (todoInput.value === '') {
+      // console.log('task can\'t be empty')
+      // console.log(todoInput.placeholder)
+      todoInput.placeholder = 'Task can\'t be empty, please type your task...'
+      todoForm.classList.remove('border-sky-600/50')
+      todoForm.classList.add('border-red-600/60')
+      //TODO: change the value of placeholder if input empty and give errro message
+      return
+    }
+  
+    todoInput.placeholder = 'Enter new Item here...'
+    todoForm.classList.remove('border-red-600/60')
+    todoForm.classList.add('border-sky-600/50')
+  
+    Todo.addTodo({
+      id: Date.now(),
+      task: todoInput.value,
+      completed: false
+    })
+    todoInput.value = ''
     return
   }
-  Todo.addTodo({
-    id: Date.now(),
-    task: todoInput.value,
-    completed: false
+
+  if (event.target.getAttribute('id') === 'todo-form') {
+    return
+  }
+  event.preventDefault()
+  const updateId = document.getElementById('update-id').value
+  const updateTask = document.getElementById('update-task').value
+  const updateComplete = document.getElementById('update-complete').value === 'true'
+  
+  if (updateTask === '') {
+    document.getElementById('update-task').placeholder = 'Task can\'t be empty, please type your task...'
+    event.target.classList.remove('border-sky-600/50')
+    event.target.classList.add('border-red-600/60')
+    return
+  }
+
+  Data.store(updateId , {
+    id :updateId,
+    task: updateTask,
+    completed: updateComplete
   })
-  todoInput.value = ''
+  loadTodo()
+  todoInput.focus()
 })
 
-
 document.addEventListener('click' , function(event) {
+
   if (event.target.classList.contains('remove')) {
+    console.log('remove ?')
     Todo.removeTodo(event.target.parentElement.parentElement.getAttribute('item-id'))
   }
 
@@ -41,7 +77,7 @@ document.addEventListener('click' , function(event) {
     }
   }
 
-  if (event.target.classList.contains('toggle-complete')) {
+  if (event.target.classList.contains('toggle-completed')) {
     itemList.innerHTML = ''
     const result = Data.getComplete()
     result.map(todo => {
@@ -65,6 +101,7 @@ document.addEventListener('click' , function(event) {
     })
   }
 
+  return
 })
 
 document.addEventListener('dblclick' , function(event) {
@@ -72,8 +109,6 @@ document.addEventListener('dblclick' , function(event) {
     Todo.toggleCompletedTodo(event.target.parentElement.getAttribute('item-id'))
   }
 })
-
-document.addEventListener('submit', updateListener)
 
 const Data = {
   getId(index) {
@@ -166,21 +201,3 @@ function loadTodo () {
 
 // Load data from localStorage and render it to html
 loadTodo()
-
-function updateListener(event) {
-  if (event.target.getAttribute('id') === 'todo-form') {
-    return
-  }
-  event.preventDefault()
-  const updateId = document.getElementById('update-id').value
-  const updateTask = document.getElementById('update-task').value
-  const updateComplete = document.getElementById('update-complete').value === 'true'
-  
-  Data.store(updateId , {
-    id :updateId,
-    task: updateTask,
-    completed: updateComplete
-  })
-  loadTodo()
-  todoInput.focus()
-}
